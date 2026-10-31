@@ -1,0 +1,540 @@
+{
+  "tesserae_compat": "1.x",
+  "tesserae_min": "0.463.0",
+  "name": "Pokédex Plate",
+  "version": "0.1.0",
+  "kind": "widget",
+  "description": "Pokémon packed onto one printed page like a natural-history specimen sheet, each as large as the page allows, number and name beneath. A generation, a type, a random sheet each day or your list, from PokeAPI. Pixel sprites, official artwork or AI paintings in eight styles.",
+  "icon": "ph-sparkle",
+  "category": "art",
+  "supports": {
+    "sizes": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "requires": [
+    "network:*"
+  ],
+  "render": {
+    "needs_network": true,
+    "warm_ahead_s": 150
+  },
+  "design": {
+    "palette": "extended"
+  },
+  "cell_options": [
+    {
+      "name": "source",
+      "type": "select",
+      "label": "Which Pokémon",
+      "default": "generation",
+      "help": "A generation or a type picks from that group; Random is a different sheet of the whole National Pokédex every day; Your list is a team or favourites you type in.",
+      "choices": [
+        {
+          "value": "generation",
+          "label": "A generation"
+        },
+        {
+          "value": "type",
+          "label": "A type"
+        },
+        {
+          "value": "random",
+          "label": "Random, a new sheet each day"
+        },
+        {
+          "value": "list",
+          "label": "Your list"
+        }
+      ]
+    },
+    {
+      "name": "generation",
+      "type": "select",
+      "label": "Generation",
+      "default": "1",
+      "show_if": {
+        "source": "generation"
+      },
+      "choices": [
+        {
+          "value": "1",
+          "label": "Generation I · Kanto"
+        },
+        {
+          "value": "2",
+          "label": "Generation II · Johto"
+        },
+        {
+          "value": "3",
+          "label": "Generation III · Hoenn"
+        },
+        {
+          "value": "4",
+          "label": "Generation IV · Sinnoh"
+        },
+        {
+          "value": "5",
+          "label": "Generation V · Unova"
+        },
+        {
+          "value": "6",
+          "label": "Generation VI · Kalos"
+        },
+        {
+          "value": "7",
+          "label": "Generation VII · Alola"
+        },
+        {
+          "value": "8",
+          "label": "Generation VIII · Galar"
+        },
+        {
+          "value": "9",
+          "label": "Generation IX · Paldea"
+        }
+      ]
+    },
+    {
+      "name": "poke_type",
+      "type": "select",
+      "label": "Type",
+      "default": "fire",
+      "show_if": {
+        "source": "type"
+      },
+      "choices": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "fire",
+          "label": "Fire"
+        },
+        {
+          "value": "water",
+          "label": "Water"
+        },
+        {
+          "value": "grass",
+          "label": "Grass"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "ice",
+          "label": "Ice"
+        },
+        {
+          "value": "fighting",
+          "label": "Fighting"
+        },
+        {
+          "value": "poison",
+          "label": "Poison"
+        },
+        {
+          "value": "ground",
+          "label": "Ground"
+        },
+        {
+          "value": "flying",
+          "label": "Flying"
+        },
+        {
+          "value": "psychic",
+          "label": "Psychic"
+        },
+        {
+          "value": "bug",
+          "label": "Bug"
+        },
+        {
+          "value": "rock",
+          "label": "Rock"
+        },
+        {
+          "value": "ghost",
+          "label": "Ghost"
+        },
+        {
+          "value": "dragon",
+          "label": "Dragon"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        },
+        {
+          "value": "steel",
+          "label": "Steel"
+        },
+        {
+          "value": "fairy",
+          "label": "Fairy"
+        }
+      ]
+    },
+    {
+      "name": "list",
+      "type": "textarea",
+      "label": "Pokémon",
+      "default": "Pikachu\nCharizard\nGengar\nSnorlax\nLapras\nEevee",
+      "placeholder": "Pikachu, Charizard, 143, #94",
+      "help": "Names or National Pokédex numbers, one per line or separated by commas, up to 24. Mr. Mime, Farfetch'd and Nidoran♀ are fine as typed. Anything PokeAPI does not know is skipped and named at the foot of the plate.",
+      "show_if": {
+        "source": "list"
+      }
+    },
+    {
+      "name": "count",
+      "type": "slider",
+      "label": "How many",
+      "default": 12,
+      "min": 1,
+      "max": 24,
+      "step": 1,
+      "help": "Pokémon on the plate. The more there are, the smaller each is.",
+      "show_if": {
+        "source": {
+          "not": "list"
+        }
+      }
+    },
+    {
+      "name": "order",
+      "type": "select",
+      "label": "Pick",
+      "default": "daily",
+      "show_if": {
+        "source": [
+          "generation",
+          "type"
+        ]
+      },
+      "help": "Which of the group make the plate. Random daily changes once a day and stays the same all day, so a battery panel is not woken for nothing. Largest first takes the tallest of the group.",
+      "choices": [
+        {
+          "value": "daily",
+          "label": "Random, a new pick each day"
+        },
+        {
+          "value": "dex",
+          "label": "In Pokédex order"
+        },
+        {
+          "value": "largest",
+          "label": "Largest first"
+        }
+      ]
+    },
+    {
+      "name": "pictures",
+      "type": "select",
+      "label": "Pictures",
+      "default": "sprite",
+      "help": "Pixel sprites are the 96 px game sprites drawn at whole-number scales, crisp on e-paper. Official artwork is the large painted artwork. AI paintings repaint each Pokémon once from its official artwork in the style below, at about US$0.04 each with Nano Banana; the artwork shows until the painting lands. Needs a fal.ai key in this widget's settings or a key under Settings, Generative AI.",
+      "choices": [
+        {
+          "value": "sprite",
+          "label": "Pixel sprites"
+        },
+        {
+          "value": "artwork",
+          "label": "Official artwork"
+        },
+        {
+          "value": "gen",
+          "label": "AI paintings"
+        }
+      ]
+    },
+    {
+      "name": "style",
+      "type": "select",
+      "label": "Style",
+      "default": "engraving",
+      "show_if": {
+        "pictures": "gen"
+      },
+      "help": "Each style is painted once per Pokémon and kept. Sumi-e and the line drawing are black ink only, the ones for a black and white panel.",
+      "choices": [
+        {
+          "value": "engraving",
+          "label": "Victorian engraving, hand-coloured"
+        },
+        {
+          "value": "watercolour",
+          "label": "Naturalist's watercolour field study"
+        },
+        {
+          "value": "ukiyoe",
+          "label": "Japanese woodblock (ukiyo-e)"
+        },
+        {
+          "value": "sumie",
+          "label": "Sumi-e ink painting"
+        },
+        {
+          "value": "linocut",
+          "label": "Linocut print"
+        },
+        {
+          "value": "line",
+          "label": "Scientific line drawing"
+        },
+        {
+          "value": "stainedglass",
+          "label": "Stained glass"
+        },
+        {
+          "value": "gouache",
+          "label": "Children's-book gouache"
+        }
+      ]
+    },
+    {
+      "name": "sizing",
+      "type": "select",
+      "label": "Sizes",
+      "default": "same",
+      "help": "About the same size gives every picture about the same room (sprites keep one pixel scale, as the games draw them). By real height scales each by its Pokédex height, so Wailord dwarfs Joltik; the smallest is held to a quarter of the tallest so it stays visible.",
+      "choices": [
+        {
+          "value": "same",
+          "label": "About the same size"
+        },
+        {
+          "value": "true",
+          "label": "By real height"
+        }
+      ]
+    },
+    {
+      "name": "labels",
+      "type": "multiselect",
+      "label": "Captions",
+      "default": [
+        "number",
+        "name"
+      ],
+      "help": "The number and the name on the first line, the types and the height on a second. Nothing ticked leaves the captions off. Crowded small cells keep the first line only.",
+      "choices": [
+        {
+          "value": "number",
+          "label": "Number"
+        },
+        {
+          "value": "name",
+          "label": "Name"
+        },
+        {
+          "value": "types",
+          "label": "Types"
+        },
+        {
+          "value": "height",
+          "label": "Height"
+        }
+      ]
+    },
+    {
+      "name": "packing",
+      "type": "select",
+      "label": "Packing",
+      "default": "balanced",
+      "advanced": true,
+      "help": "Balanced packs from the middle out and grows each picture into the room left. Spiral makes a round cluster; Voids spreads the large ones over the page and fills the gaps with the small ones.",
+      "choices": [
+        {
+          "value": "balanced",
+          "label": "Balanced"
+        },
+        {
+          "value": "spiral",
+          "label": "Spiral"
+        },
+        {
+          "value": "voids",
+          "label": "Voids"
+        }
+      ]
+    },
+    {
+      "name": "names",
+      "type": "select",
+      "label": "Names in",
+      "default": "en",
+      "advanced": true,
+      "help": "The language of the Pokémon names, from PokeAPI. Titles and types stay in English.",
+      "choices": [
+        {
+          "value": "en",
+          "label": "English"
+        },
+        {
+          "value": "ja-Hrkt",
+          "label": "Japanese (kana)"
+        },
+        {
+          "value": "ja-roma",
+          "label": "Japanese (romaji)"
+        },
+        {
+          "value": "de",
+          "label": "German"
+        },
+        {
+          "value": "fr",
+          "label": "French"
+        },
+        {
+          "value": "es",
+          "label": "Spanish"
+        },
+        {
+          "value": "it",
+          "label": "Italian"
+        },
+        {
+          "value": "ko",
+          "label": "Korean"
+        },
+        {
+          "value": "zh-Hans",
+          "label": "Chinese (simplified)"
+        }
+      ]
+    },
+    {
+      "name": "paper",
+      "type": "select",
+      "label": "Paper",
+      "default": "cream",
+      "advanced": true,
+      "help": "The page colour on a colour panel. Greyscale and black and white panels always print on white.",
+      "choices": [
+        {
+          "value": "cream",
+          "label": "Cream"
+        },
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "aged",
+          "label": "Aged"
+        }
+      ]
+    },
+    {
+      "name": "panel",
+      "type": "select",
+      "label": "Panel",
+      "default": "colour",
+      "advanced": true,
+      "help": "What the panel can show. Sprites snap to the panel's own greys, or on black and white are thresholded to clean black line art; artwork and paintings are converted and contrast-stretched.",
+      "choices": [
+        {
+          "value": "colour",
+          "label": "Colour"
+        },
+        {
+          "value": "gray16",
+          "label": "16 greys"
+        },
+        {
+          "value": "gray4",
+          "label": "4 greys"
+        },
+        {
+          "value": "mono",
+          "label": "Black and white"
+        }
+      ]
+    },
+    {
+      "name": "model",
+      "type": "select",
+      "label": "Model",
+      "default": "nano_banana",
+      "advanced": true,
+      "show_if": {
+        "pictures": "gen"
+      },
+      "help": "All on fal.ai, all painting from the official artwork. Nano Banana is faithful and cheap; Nano Banana Pro follows an unusual style better; FLUX.1 Kontext Pro holds a style most strongly; GPT Image 2 is a good likeness; Seedream 4 is the budget one. A painting made with one model is kept when you switch to another.",
+      "choices": [
+        {
+          "value": "nano_banana",
+          "label": "Nano Banana (about US$0.04)"
+        },
+        {
+          "value": "nano_banana_pro",
+          "label": "Nano Banana Pro (about US$0.15)"
+        },
+        {
+          "value": "flux_kontext",
+          "label": "FLUX.1 Kontext Pro (about US$0.04)"
+        },
+        {
+          "value": "gpt_image",
+          "label": "GPT Image 2 (about US$0.05)"
+        },
+        {
+          "value": "seedream",
+          "label": "Seedream 4 (about US$0.03)"
+        }
+      ]
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "label": "Title",
+      "default": "",
+      "advanced": true,
+      "help": "Blank names the generation, the type, or the day."
+    },
+    {
+      "name": "credits",
+      "type": "boolean",
+      "label": "Credits",
+      "default": true,
+      "advanced": true,
+      "help": "The PokeAPI credit and the trademark notice at the foot of the plate, and the model behind any AI paintings."
+    }
+  ],
+  "settings": [
+    {
+      "name": "fal_api_key",
+      "type": "string",
+      "label": "fal.ai API key (AI paintings)",
+      "secret": true,
+      "default": "",
+      "help": "With a key the widget can repaint each Pokémon from its official artwork, at about US$0.04 a painting, once per Pokémon and style. Get one at https://fal.ai/dashboard/keys; it is only sent to fal.run. Without one the widget shows sprites or artwork."
+    },
+    {
+      "name": "gen_daily_usd",
+      "type": "slider",
+      "label": "Painting budget per day",
+      "default": 2,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "US$",
+      "help": "The most the widget may spend on new paintings in a day, at the models' listed prices (US$2 is about fifty Nano Banana paintings). 0 is no limit. Paintings are kept, so a Pokémon in a style only costs once."
+    },
+    {
+      "name": "gen_per_refresh",
+      "type": "number",
+      "label": "New paintings started per preview",
+      "default": 3,
+      "help": "How many new paintings one settled preview in the editor may start (1 to 50). A panel's own render starts what its page needs, within the daily budget."
+    }
+  ]
+}
