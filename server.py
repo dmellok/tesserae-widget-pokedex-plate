@@ -50,7 +50,7 @@ except (
 logger = logging.getLogger(__name__)
 
 WIDGET = "pokedex_plate"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 USER_AGENT = f"tesserae/pokedex_plate/{VERSION} (+https://github.com/dmellok/tesserae-widget-pokedex-plate)"
 API = "https://pokeapi.co/api/v2"
 GRAPHQL = "https://graphql.pokeapi.co/v1beta2"
@@ -153,10 +153,29 @@ STYLES: dict[str, tuple[str, str, bool]] = {
     ),
     "ukiyoe": (
         "Japanese woodblock (ukiyo-e)",
-        "a Japanese ukiyo-e woodblock print: confident black keyblock outlines of even weight, "
-        "flat areas of muted mineral colour, soft bokashi gradations, the grain of the block "
-        "faintly visible in the flat colour",
+        "an Edo-period ukiyo-e woodblock print in the manner of Hokusai and Kuniyoshi: the "
+        "creature redrawn as a print designer would carve it, crisp black keyblock outlines of "
+        "even weight, stylised curling lines for fur, fins, flame and water, flat areas of "
+        "muted indigo, vermilion, ochre and sage, soft bokashi gradations, the woodgrain and "
+        "the slight misregistration of hand printing showing, the look of an 1830s print",
         False,
+    ),
+    "kachoe": (
+        "Shin-hanga nature print (kachō-e)",
+        "a shin-hanga woodblock nature print in the manner of Ohara Koson: delicate keyblock "
+        "lines, gentle naturalistic colour printed in soft translucent layers, subtle bokashi "
+        "shading, a calm, observant, lifelike attitude, the quiet elegance of a 1920s Japanese "
+        "print. The creature keeps its own anatomy exactly: it is not turned into a bird or "
+        "given feathers, wings or a beak it does not have",
+        False,
+    ),
+    "chojugiga": (
+        "Chōjū-giga ink scroll",
+        "a drawing from the Chōjū-jinbutsu-giga, the twelfth-century Japanese animal scrolls: "
+        "lively, playful brush lines in black sumi ink on paper, loose and economical, a few "
+        "light grey washes, the creature full of character and movement, black ink only with "
+        "no colour at all",
+        True,
     ),
     "sumie": (
         "Sumi-e ink painting",
@@ -178,12 +197,6 @@ STYLES: dict[str, tuple[str, str, bool]] = {
         "no colour at all",
         True,
     ),
-    "stainedglass": (
-        "Stained glass",
-        "a stained-glass window panel: the creature built from pieces of coloured glass held "
-        "by dark lead lines, rich translucent colours with a little painted detail on the glass",
-        False,
-    ),
     "gouache": (
         "Children's-book gouache",
         "a gouache illustration from a classic children's picture book: opaque matt paint, soft "
@@ -191,7 +204,7 @@ STYLES: dict[str, tuple[str, str, bool]] = {
         False,
     ),
 }
-MODELS = ("nano_banana", "nano_banana_pro", "flux_kontext", "gpt_image", "seedream")
+MODELS = ("seedream", "nano_banana", "nano_banana_pro", "flux_kontext", "gpt_image")
 MODEL_LABELS = {
     "nano_banana": "Nano Banana",
     "nano_banana_pro": "Nano Banana Pro",
@@ -199,13 +212,49 @@ MODEL_LABELS = {
     "gpt_image": "GPT Image 2",
     "seedream": "Seedream 4",
 }
+# The reference fixes who the creature is, not how it is drawn. Told to paint the creature in
+# the artwork, a painter restyles the artwork, pose, outlines, shading and all, and the style
+# barely shows; told only that the pose is its own it still keeps the artwork's. So the prompt
+# opens with a pose of its own (an attitude picked by Pokémon) and says plainly not to trace
+# or restyle the reference. A change here bumps PROMPT_VERSION, which gives every painting a
+# new key.
 PROMPT = (
-    "Paint the Pokémon {name} from the reference picture as {style}. Show the whole creature "
-    "alone, its whole body in view, its true colours, markings and proportions kept exactly as "
-    "in the reference{mono}. The creature fills the picture. On plain pure white paper: no "
-    "background, no scenery, no text, no label, no border, no frame, no shadow."
+    "A new drawing of the Pokémon {name}, made from scratch as {style}. {name} is drawn "
+    "{attitude}. This pose and viewing angle are required: they must differ from the "
+    "reference picture's. Do not trace, restyle or repaint the reference picture: its pose, "
+    "outlines, shading and rendering are not used at all. The reference is for identity only: "
+    "{name}'s shape, proportions and markings{colours} kept true. Every line and every area "
+    "of colour is made in the medium described, so the picture reads unmistakably as that "
+    "medium and not as game artwork.{mono} {name} alone, its whole body in view, filling the "
+    "picture, on plain pure white paper: no background, no scenery, no water, no waves, no "
+    "ground, no text, no label, no seal, no signature, no border, no frame, no shadow. If the result would look like the reference with "
+    "a filter on it, draw it again in the pose above."
 )
-PROMPT_MONO = ", rendered in black ink only"
+PROMPT_COLOURS = " and the colours of its markings"
+PROMPT_MONO = (
+    " Black ink only: no colour anywhere, not even on the eyes or markings; its colours become "
+    "tones of grey ink."
+)
+PROMPT_VERSION = 4
+# A creature's attitude, picked by Pokémon so a sheet holds a mix of them and a Pokémon keeps
+# its own from one painting to the next.
+ATTITUDES = (
+    "facing left in three-quarter view, mid-stride, its head turned back over its shoulder",
+    "facing right in clean side profile, poised and alert",
+    "seen from the front in three-quarter view, head tilted to one side, looking out",
+    "leaning forward low to the ground as if about to spring, facing left",
+    "at rest, settled comfortably, facing right, eyes half closed",
+    "turned half away so its back shows, looking back towards the viewer",
+    "leaping or lunging to the right, full of movement",
+    "rearing up tall, facing left, seen a little from below",
+)
+
+
+def attitude(pid: int) -> str:
+    """A Pokémon's attitude for its paintings, the same every time."""
+    pick = int(hashlib.sha1(f"pose|{int(pid)}".encode()).hexdigest()[:6], 16)
+    return ATTITUDES[pick % len(ATTITUDES)]
+
 
 # A sheet that renders with no network at all: the Kanto starters and friends, data only.
 SAMPLE: list[dict[str, Any]] = [
@@ -690,7 +739,9 @@ def prompt_for(payload: dict[str, Any]) -> str:
     style = STYLES.get(str(payload.get("style") or ""), STYLES["engraving"])
     return PROMPT.format(
         name=payload.get("name") or "creature",
+        attitude=attitude(int(payload.get("id") or 0)),
         style=style[1],
+        colours="" if style[2] else PROMPT_COLOURS,
         mono=PROMPT_MONO if style[2] else "",
     )
 
@@ -702,7 +753,7 @@ def paint(job: Any) -> tuple[bytes, dict[str, Any]]:
     ref = str(p.get("artwork") or "")
     if not ref:
         raise artwork.ArtworkError("no official artwork to paint from")
-    model = str(p.get("model") or "") if p.get("model") in MODELS else "nano_banana"
+    model = str(p.get("model") or "") if p.get("model") in MODELS else MODELS[0]
     raw = job.fal.generate(model, prompt_for(p), refs=[ref], aspect=ASPECT)
     label = MODEL_LABELS.get(model, model)
     return raw, {
@@ -920,7 +971,7 @@ ART: Any = (
 
 
 def painting_key(pid: int, name_slug_: str, style: str) -> str:
-    return f"{int(pid):04d}_{slug(name_slug_)}--{style}--p1"
+    return f"{int(pid):04d}_{slug(name_slug_)}--{style}--p{PROMPT_VERSION}"
 
 
 # ----------------------------------------------------------------------

@@ -52,14 +52,22 @@ cropped to the creature, so it sits on the plate's paper as if printed there.
 Until a painting lands the official artwork shows, and the editors poll while
 the work is on the way. A painting is kept and never paid for twice; the
 paintings page at `/plugins/pokedex_plate/artwork/paintings/` lists them with
-Repaint and Delete. Each costs about US$0.04 with Nano Banana, within a daily
-budget you set.
+Repaint and Delete. Each costs about US$0.03 with Seedream 4, the default, within
+a daily budget you set.
 
-Eight styles: Victorian engraving, hand-coloured (the default); naturalist's
-watercolour field study; Japanese woodblock (ukiyo-e); sumi-e ink painting;
-linocut print; scientific line drawing; stained glass; children's-book gouache.
-Sumi-e and the line drawing are black ink only, the ones for a black and white
-panel.
+Each Pokémon is drawn afresh in a pose of its own, not the official artwork with a
+filter on it: the artwork is only the reference for what it looks like. Seedream 4
+redraws most freely; Nano Banana and GPT Image 2 keep closer to the artwork, and
+some models may refuse a well-known character outright, in which case the
+official artwork stays on the plate.
+
+Nine styles: Victorian engraving, hand-coloured (the default); naturalist's
+watercolour field study; three Japanese ones, an Edo-period woodblock print
+(ukiyo-e) after Hokusai and Kuniyoshi, a shin-hanga nature print (kachō-e) after
+Ohara Koson and a Chōjū-giga ink scroll after the twelfth-century animal scrolls;
+sumi-e ink painting; linocut print; scientific line drawing; children's-book
+gouache. Sumi-e, the Chōjū-giga scroll and the line drawing are black ink only,
+the ones for a black and white panel.
 
 ![AI paintings, Victorian engraving, hand-coloured](screenshots/extra-4.png)
 
@@ -105,7 +113,7 @@ with the choice they depend on or sit under **More options**.
 | How many | 1 to 24, default 12 (not for a list). |
 | Pick | With a generation or a type: random each day (default), Pokédex order, or largest first. |
 | Pictures | Pixel sprites (default), official artwork, or AI paintings. |
-| Style | With AI paintings: the eight styles above. |
+| Style | With AI paintings: the nine styles above. |
 | Sizes | About the same size (default), or by real height. |
 | Captions | Any of number, name, types, height. Default number and name. |
 | Packing | More options. Balanced (default), spiral, or voids. |
@@ -138,12 +146,12 @@ names without pictures and says so.
 | Generation I in Pokédex order, official artwork, 1200x800 | A list of favourites in pixel sprites at one scale, 1200x800 |
 | ![Water type by real height, 1200x800](screenshots/extra-2.png) | ![Generation IV, portrait, 600x800](screenshots/extra-3.png) |
 | Water type, largest first, by real height, 1200x800 | Generation IV on white paper, portrait half panel, 600x800 |
-| ![AI paintings, Victorian engraving, 1200x800](screenshots/extra-4.png) | ![Black and white panel, sprites, 800x480](screenshots/extra-5.png) |
-| AI paintings (Nano Banana), Victorian engraving, 1200x800 | Generation I sprites on a black and white panel, 800x480 |
-| ![Random daily sheet, sprites, 1200x1600](screenshots/extra-6.png) | ![Dragon type at md, 640x400](screenshots/extra-7.png) |
-| Today's random sheet of twenty in sprites, 13.3" portrait, 1200x1600 | Dragon type in official artwork at md, 640x400 |
-| ![Japanese names on aged paper, 1200x800](screenshots/extra-8.png) | ![Generation V on a 4-grey panel, voids packing, 800x480](screenshots/extra-9.png) |
-| Names in Japanese with types and heights, aged paper, 1200x800 | Generation V on a 4-grey panel, voids packing, 800x480 |
+| ![AI paintings, Victorian engraving, 1200x800](screenshots/extra-4.png) | ![AI drawings, shin-hanga nature print, 1200x800](screenshots/extra-5.png) |
+| AI paintings (Nano Banana), Victorian engraving, 1200x800 | AI drawings (Seedream 4), shin-hanga nature print (kachō-e), 1200x800 |
+| ![AI paintings, children's-book gouache, 1200x1600](screenshots/extra-6.png) | ![AI drawings, ukiyo-e woodblock, 1200x800](screenshots/extra-7.png) |
+| AI paintings (Nano Banana), children's-book gouache, 13.3" portrait, 1200x1600 | AI drawings (Seedream 4), Edo-period woodblock print (ukiyo-e), 1200x800 |
+| ![Japanese names on aged paper, 1200x800](screenshots/extra-8.png) | ![AI drawings, Chōjū-giga ink scroll, 1200x800](screenshots/extra-9.png) |
+| Names in Japanese with types and heights, aged paper, 1200x800 | AI drawings (Seedream 4), Chōjū-giga ink scroll, black ink only, white paper, 1200x800 |
 
 ## Development
 

@@ -2,9 +2,9 @@
   "tesserae_compat": "1.x",
   "tesserae_min": "0.463.0",
   "name": "Pokédex Plate",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "kind": "widget",
-  "description": "Pokémon packed onto one printed page like a natural-history specimen sheet, each as large as the page allows, number and name beneath. A generation, a type, a random sheet each day or your list, from PokeAPI. Pixel sprites, official artwork or AI paintings in eight styles.",
+  "description": "Pokémon packed onto one printed page like a natural-history specimen sheet, each as large as the page allows, number and name beneath. A generation, a type, a daily random sheet or your list, from PokeAPI. Pixel sprites, official artwork or AI drawings in nine styles.",
   "icon": "ph-sparkle",
   "category": "art",
   "supports": {
@@ -262,7 +262,7 @@
       "show_if": {
         "pictures": "gen"
       },
-      "help": "Each style is painted once per Pokémon and kept. Sumi-e and the line drawing are black ink only, the ones for a black and white panel.",
+      "help": "Each style is drawn once per Pokémon, in a pose of its own, and kept. Sumi-e, the Chōjū-giga scroll and the line drawing are black ink only, the ones for a black and white panel.",
       "choices": [
         {
           "value": "engraving",
@@ -277,6 +277,14 @@
           "label": "Japanese woodblock (ukiyo-e)"
         },
         {
+          "value": "kachoe",
+          "label": "Shin-hanga nature print (kachō-e)"
+        },
+        {
+          "value": "chojugiga",
+          "label": "Chōjū-giga ink scroll"
+        },
+        {
           "value": "sumie",
           "label": "Sumi-e ink painting"
         },
@@ -287,10 +295,6 @@
         {
           "value": "line",
           "label": "Scientific line drawing"
-        },
-        {
-          "value": "stainedglass",
-          "label": "Stained glass"
         },
         {
           "value": "gouache",
@@ -463,13 +467,17 @@
       "name": "model",
       "type": "select",
       "label": "Model",
-      "default": "nano_banana",
+      "default": "seedream",
       "advanced": true,
       "show_if": {
         "pictures": "gen"
       },
-      "help": "All on fal.ai, all painting from the official artwork. Nano Banana is faithful and cheap; Nano Banana Pro follows an unusual style better; FLUX.1 Kontext Pro holds a style most strongly; GPT Image 2 is a good likeness; Seedream 4 is the budget one. A painting made with one model is kept when you switch to another.",
+      "help": "All on fal.ai, all drawing from the official artwork. Seedream 4 (the default) redraws most freely and is the cheapest; the others keep closer to the official artwork, Nano Banana and GPT Image 2 most of all. A painting made with one model is kept when you switch to another.",
       "choices": [
+        {
+          "value": "seedream",
+          "label": "Seedream 4 (about US$0.03)"
+        },
         {
           "value": "nano_banana",
           "label": "Nano Banana (about US$0.04)"
@@ -485,10 +493,6 @@
         {
           "value": "gpt_image",
           "label": "GPT Image 2 (about US$0.05)"
-        },
-        {
-          "value": "seedream",
-          "label": "Seedream 4 (about US$0.03)"
         }
       ]
     },

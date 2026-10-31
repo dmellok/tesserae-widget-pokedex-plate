@@ -526,8 +526,8 @@ def test_ai_pending_shows_the_artwork_meanwhile(tmp_path: Path) -> None:
             tmp_path, source="list", list="25, 6", pictures="gen", style="ukiyoe"
         )
     assert [k for k, _ in art.requests] == [
-        "0025_pikachu--ukiyoe--p1",
-        "0006_charizard--ukiyoe--p1",
+        "0025_pikachu--ukiyoe--p4",
+        "0006_charizard--ukiyoe--p4",
     ]
     payload = art.requests[0][1]
     assert (
@@ -573,9 +573,11 @@ def test_prompt_and_paint() -> None:
     text = server.prompt_for({"style": "engraving", "name": "Pikachu"})
     for words in (
         "Pikachu",
-        "whole creature",
+        "whole body",
         "alone",
-        "true colours",
+        "Do not trace",
+        "drawn ",
+        "colours of its markings",
         "proportions",
         "plain pure white paper",
         "no background",
@@ -585,13 +587,19 @@ def test_prompt_and_paint() -> None:
         "Victorian",
     ):
         assert words in text
-    assert "black ink only" in server.prompt_for({"style": "sumie", "name": "x"})
-    assert "black ink only" in server.prompt_for({"style": "line", "name": "x"})
-    assert (
-        "black ink only"
-        not in server.prompt_for({"style": "linocut", "name": "x"}).split("as a")[0]
+    assert "Black ink only" in server.prompt_for({"style": "sumie", "name": "x"})
+    assert "Black ink only" in server.prompt_for({"style": "line", "name": "x"})
+    assert "colours of its markings" not in server.prompt_for(
+        {"style": "sumie", "name": "x"}
     )
-    assert len(server.STYLES) == 8
+    assert "Black ink only" not in server.prompt_for({"style": "linocut", "name": "x"})
+    assert len(server.STYLES) == 9
+    assert "stainedglass" not in server.STYLES
+    # a Pokémon keeps its attitude from one painting to the next
+    assert server.attitude(25) == server.attitude(25)
+    assert server.attitude(25) in server.prompt_for(
+        {"style": "ukiyoe", "name": "Pikachu", "id": 25}
+    )
 
     seen = {}
 
