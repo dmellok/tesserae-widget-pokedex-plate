@@ -2,7 +2,7 @@
   "tesserae_compat": "1.x",
   "tesserae_min": "0.463.0",
   "name": "Pokédex Plate",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "kind": "widget",
   "description": "Pokémon packed onto one printed page like a natural-history specimen sheet, each as large as the page allows, number and name beneath. A generation, a type, a daily random sheet or your list, from PokeAPI. Pixel sprites, official artwork or AI drawings in nine styles.",
   "icon": "ph-sparkle",
@@ -467,17 +467,13 @@
       "name": "model",
       "type": "select",
       "label": "Model",
-      "default": "seedream",
+      "default": "nano_banana",
       "advanced": true,
       "show_if": {
         "pictures": "gen"
       },
-      "help": "All on fal.ai, all drawing from the official artwork. Seedream 4 (the default) redraws most freely and is the cheapest; the others keep closer to the official artwork, Nano Banana and GPT Image 2 most of all. A painting made with one model is kept when you switch to another.",
+      "help": "All on fal.ai, all drawing from the official artwork. Nano Banana (the default) is faithful and cheap; Seedream 4 redraws most freely, the one for the Japanese styles; some models may refuse a well-known character, and the official artwork then stays. A painting made with one model is kept when you switch to another.",
       "choices": [
-        {
-          "value": "seedream",
-          "label": "Seedream 4 (about US$0.03)"
-        },
         {
           "value": "nano_banana",
           "label": "Nano Banana (about US$0.04)"
@@ -493,6 +489,10 @@
         {
           "value": "gpt_image",
           "label": "GPT Image 2 (about US$0.05)"
+        },
+        {
+          "value": "seedream",
+          "label": "Seedream 4 (about US$0.03)"
         }
       ]
     },

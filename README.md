@@ -52,12 +52,13 @@ cropped to the creature, so it sits on the plate's paper as if printed there.
 Until a painting lands the official artwork shows, and the editors poll while
 the work is on the way. A painting is kept and never paid for twice; the
 paintings page at `/plugins/pokedex_plate/artwork/paintings/` lists them with
-Repaint and Delete. Each costs about US$0.03 with Seedream 4, the default, within
+Repaint and Delete. Each costs about US$0.04 with Nano Banana, the default, within
 a daily budget you set.
 
 Each Pokémon is drawn afresh in a pose of its own, not the official artwork with a
 filter on it: the artwork is only the reference for what it looks like. Seedream 4
-redraws most freely; Nano Banana and GPT Image 2 keep closer to the artwork, and
+redraws most freely and suits the Japanese styles best; Nano Banana and GPT Image 2
+keep closer to the artwork, and
 some models may refuse a well-known character outright, in which case the
 official artwork stays on the plate.
 

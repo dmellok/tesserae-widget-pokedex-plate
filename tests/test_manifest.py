@@ -52,7 +52,7 @@ def _values(name: str) -> list[str]:
 def test_manifest_basics() -> None:
     assert MANIFEST["name"] == "Pokédex Plate"
     assert MANIFEST["kind"] == "widget"
-    assert MANIFEST["version"] == server.VERSION == "0.2.0"
+    assert MANIFEST["version"] == server.VERSION == "0.2.1"
     assert MANIFEST["tesserae_compat"] == "1.x"
     assert MANIFEST["tesserae_min"] == "0.463.0"
     assert MANIFEST["icon"].startswith("ph-")

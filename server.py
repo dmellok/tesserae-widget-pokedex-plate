@@ -50,7 +50,7 @@ except (
 logger = logging.getLogger(__name__)
 
 WIDGET = "pokedex_plate"
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 USER_AGENT = f"tesserae/pokedex_plate/{VERSION} (+https://github.com/dmellok/tesserae-widget-pokedex-plate)"
 API = "https://pokeapi.co/api/v2"
 GRAPHQL = "https://graphql.pokeapi.co/v1beta2"
@@ -204,7 +204,7 @@ STYLES: dict[str, tuple[str, str, bool]] = {
         False,
     ),
 }
-MODELS = ("seedream", "nano_banana", "nano_banana_pro", "flux_kontext", "gpt_image")
+MODELS = ("nano_banana", "nano_banana_pro", "flux_kontext", "gpt_image", "seedream")
 MODEL_LABELS = {
     "nano_banana": "Nano Banana",
     "nano_banana_pro": "Nano Banana Pro",
